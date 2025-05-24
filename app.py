@@ -1,101 +1,83 @@
-
 import streamlit as st
-import plotly.express as px
 from PIL import Image
+import plotly.express as px
 
-# ===== CONFIGURASI =====
-st.set_page_config(page_title="Portfolio | M. Yahya Firza Afitian", page_icon="📊", layout="wide")
+# Konfigurasi halaman
+st.set_page_config(
+    page_title="Portofolio M Yahya Firza Afitian",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# ===== SIDEBAR =====
-st.sidebar.image("assets/profile.jpg", width=150)
-st.sidebar.title("📌 Navigasi")
-menu = st.sidebar.radio("Pilih Halaman:", ["Tentang Saya", "Proyek", "Keahlian", "Pengalaman", "Kontak"])
+# Load gambar profil
+try:
+    image = Image.open("assets/profile.jpg")
+except:
+    image = None
 
-# ===== HEADER UMUM =====
-def header():
+# Sidebar navigasi
+st.sidebar.title("📁 Navigasi")
+menu = st.sidebar.radio("Pilih Halaman", ["Beranda", "Pengalaman", "Proyek", "Kontak"])
+
+# Warna dan style
+st.markdown("""
+    <style>
+    .main {background-color: #f5f7fa;}
+    .css-1v0mbdj, .css-1d391kg {font-family: 'Segoe UI', sans-serif;}
+    </style>
+""", unsafe_allow_html=True)
+
+# Konten halaman
+if menu == "Beranda":
+    st.title("👋 Selamat Datang di Portofolio Saya")
+    col1, col2 = st.columns([1, 3])
+    if image:
+        col1.image(image, width=150)
+    col2.markdown("""
+        ### M Yahya Firza Afitian, S.Si
+        Lulusan Matematika dengan minat besar dalam **Data Science & Data Analysis**. 
+        Berpengalaman dalam Python, SQL, Machine Learning, dan Visualisasi Data.
+    """)
+    st.markdown("---")
+    st.subheader("📌 Ringkasan Keahlian")
     st.markdown("""
-        <style>
-        .main-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #ff6f61;
-        }
-        .subtitle {
-            font-size: 1.2rem;
-            color: #666;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="main-title">M Yahya Firza Afitian, S.Si</div>
-    <div class="subtitle">Data Analyst | Data Scientist | Machine Learning Enthusiast</div>
-    """, unsafe_allow_html=True)
-    st.write("📍 Cirebon | 📧 fafitian@gmail.com | [LinkedIn](https://linkedin.com/in/myahyafirzaafitian10)")
-
-# ===== HALAMAN TENTANG SAYA =====
-def about():
-    header()
-    st.write("""
-    Lulusan Matematika dari Universitas Ahmad Dahlan dengan IPK 3.79. Memiliki ketertarikan kuat terhadap data science dan data analysis. Menguasai Python, R, SQL, serta alat visualisasi seperti Tableau dan Power BI. Berpengalaman dalam pengolahan data, analisis statistik, dan machine learning.
+    - Python, R, SQL
+    - Machine Learning, Deep Learning
+    - Power BI, Tableau, Excel, Jupyter, RStudio
+    - Regresi, Klasifikasi, Clustering, Data Cleaning
     """)
 
-# ===== HALAMAN PROYEK =====
-def projects():
-    header()
-    st.subheader("🧠 Daftar Proyek")
-    proyek = [
-        {"nama": "Analisis Sentimen Twitter", "deskripsi": "Menggunakan NLP untuk klasifikasi sentimen publik."},
-        {"nama": "Dashboard Penjualan Retail", "deskripsi": "Menggunakan Power BI untuk visualisasi penjualan dan profit margin."},
-        {"nama": "Model Prediksi Harga Rumah", "deskripsi": "Menggunakan regresi linier dan random forest pada dataset housing."}
-    ]
-    for p in proyek:
-        with st.expander(p["nama"]):
-            st.write(p["deskripsi"])
-
-# ===== HALAMAN KEAHLIAN =====
-def skills():
-    header()
-    st.subheader("📊 Komposisi Keahlian")
-    data = {"Python": 30, "SQL": 25, "R": 15, "Excel": 10, "Power BI": 20}
-    fig = px.pie(names=list(data.keys()), values=list(data.values()), title="Skill Set")
-    st.plotly_chart(fig)
-
-# ===== HALAMAN PENGALAMAN =====
-def experience():
-    header()
-    st.subheader("💼 Pengalaman Kerja")
-    st.markdown("""
-    **Laboratory Analyst – PT Long Rich Indonesia** (Nov 2024 – Sekarang)  
-    Melakukan pengujian dan analisis bahan sepatu untuk standar kualitas ASICS.
-
-    **HRD – A.S.S Toserba Losari** (Jan 2024 – Nov 2024)  
-    Menangani rekrutmen, penggajian, dan administrasi BPJS.
-
-    **Asisten Praktikum & Mentor PSDS – UAD Yogyakarta**  
-    Mengajar Python, optimisasi, dan machine learning pada mahasiswa.
-    """)
-
-# ===== HALAMAN KONTAK =====
-def contact():
-    header()
-    st.subheader("📬 Hubungi Saya")
-    with st.form("contact_form"):
-        nama = st.text_input("Nama")
-        email = st.text_input("Email")
-        pesan = st.text_area("Pesan")
-        submit = st.form_submit_button("Kirim")
-        if submit:
-            st.success("Pesan berhasil dikirim! (simulasi)")
-
-# ===== RENDER SESUAI MENU =====
-if menu == "Tentang Saya":
-    about()
-elif menu == "Proyek":
-    projects()
-elif menu == "Keahlian":
-    skills()
 elif menu == "Pengalaman":
-    experience()
+    st.title("💼 Pengalaman Kerja & Organisasi")
+    st.markdown("### Laboratory Analyst – PT Long Rich Indonesia (2024 - Sekarang)")
+    st.markdown("- Uji kualitas bahan sepatu berdasarkan standar ASICS.")
+    st.markdown("### HRD – A.S.S Toserba Losari (2024)")
+    st.markdown("- Mengelola sistem SDM dan proses rekrutmen.")
+    st.markdown("### Mentor – PSDS UAD Yogyakarta (2023)")
+    st.markdown("- Mengajar Python & Machine Learning.")
+    st.markdown("---")
+    st.markdown("### Organisasi")
+    st.markdown("- Ketua Umum HMPS Matematika UAD (2021-2022)")
+    st.markdown("- Kepala Divisi PBSDM (2020-2021)")
+
+elif menu == "Proyek":
+    st.title("📊 Proyek & Visualisasi")
+    df = px.data.iris()
+    fig = px.scatter(df, x="sepal_width", y="sepal_length", color="species", title="Contoh Visualisasi Proyek")
+    st.plotly_chart(fig, use_container_width=True)
+    st.markdown("### Klasifikasi Gambar dengan CNN")
+    st.markdown("- Skripsi: *CNN dengan Aktivasi untuk Citra Noisy Poisson*")
+    st.markdown("- Framework: TensorFlow, Keras")
+    st.markdown("### Lainnya")
+    st.markdown("- Dashboard Analisis Penjualan dengan Power BI")
+    st.markdown("- Model Regresi Prediksi Harga")
+
 elif menu == "Kontak":
-    contact()
+    st.title("📬 Kontak Saya")
+    st.markdown("""
+    - 📍 **Cirebon, 45192**
+    - 📧 [fafitian@gmail.com](mailto:fafitian@gmail.com)
+    - 📱 +62 851 5628 1876
+    - 💼 [LinkedIn](https://linkedin.com/in/myahyafirzaafitian10)
+    """)
